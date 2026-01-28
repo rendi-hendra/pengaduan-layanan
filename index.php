@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+require_once "config.php";
+
+/* =========================
+   KONEKSI POSTGRESQL (1x saja)
+   ========================= */
+$conn = pg_connect("host=$db_host port=$db_port dbname=$db_name user=$db_user password=$db_pass");
+if (!$conn) {
+  die("Koneksi PostgreSQL gagal: " . htmlspecialchars(pg_last_error()));
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -12,65 +21,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     'nama_pasien',
     'alamat',
     'nomor_hp',
-    'q1',
-    'q2',
-    'q3',
-    'q4',
-    'q5',
-    'q6',
-    'q7',
-    'q8',
-    'q9'
+    'q1','q2','q3','q4','q5','q6','q7','q8','q9'
   ];
 
   $is_valid = true;
   foreach ($required_fields as $field) {
-    if (!isset($_POST[$field]) || empty(trim($_POST[$field]))) {
+    if (!isset($_POST[$field]) || trim((string)$_POST[$field]) === '') {
       $is_valid = false;
       break;
     }
   }
 
+  // jobs masih boleh lebih dari 1 (checkbox)
+  if (!isset($_POST['jobs']) || count((array)$_POST['jobs']) === 0) $is_valid = false;
 
-  if (!isset($_POST['jobs']) || count($_POST['jobs']) === 0) $is_valid = false;
-  if (!isset($_POST['services']) || count($_POST['services']) === 0) $is_valid = false;
-
+  // layanan sekarang 1 pilihan (radio)
+  if (!isset($_POST['service']) || trim((string)$_POST['service']) === '') $is_valid = false;
 
   if ($is_valid) {
-    $data = [
-      'timestamp' => date('Y-m-d H:i:s'),
-      'survey_date' => $_POST['surveyDate'],
-      'survey_time' => $_POST['surveyTime'],
-      'gender' => $_POST['gender'],
-      'education' => $_POST['education'],
-      'jobs' => $_POST['jobs'],
-      'services' => $_POST['services'],
-      'answers' => [
-        'q1' => $_POST['q1'],
-        'q2' => $_POST['q2'],
-        'q3' => $_POST['q3'],
-        'q4' => $_POST['q4'],
-        'q5' => $_POST['q5'],
-        'q6' => $_POST['q6'],
-        'q7' => $_POST['q7'],
-        'q8' => $_POST['q8'],
-        'q9' => $_POST['q9'],
-      ],
-      'nama_pasien' => $_POST['nama_pasien'],
-      'alamat' => $_POST['alamat'],
-      'nomor_hp' => $_POST['nomor_hp'],
-      'keluhan' => $_POST['keluhan'] ?? ''
+
+    $jobs = implode(',', array_map('trim', (array)$_POST['jobs']));
+    $service = trim((string)$_POST['service']); // satu pilihan saja
+
+    $sql = "INSERT INTO kuesioner
+      (survey_date, survey_time, gender, education, jobs, services,
+       q1,q2,q3,q4,q5,q6,q7,q8,q9,
+       nama_pasien, alamat, nomor_hp, keluhan)
+      VALUES
+      ($1,$2,$3,$4,$5,$6,
+       $7,$8,$9,$10,$11,$12,$13,$14,$15,
+       $16,$17,$18,$19)";
+
+    $params = [
+      $_POST['surveyDate'],
+      $_POST['surveyTime'],
+      $_POST['gender'],
+      $_POST['education'],
+      $jobs,
+      $service, // kolom DB tetap "services", tapi isi 1 layanan
+      (int)$_POST['q1'],
+      (int)$_POST['q2'],
+      (int)$_POST['q3'],
+      (int)$_POST['q4'],
+      (int)$_POST['q5'],
+      (int)$_POST['q6'],
+      (int)$_POST['q7'],
+      (int)$_POST['q8'],
+      (int)$_POST['q9'],
+      $_POST['nama_pasien'],
+      $_POST['alamat'],
+      $_POST['nomor_hp'],
+      ($_POST['keluhan'] ?? null)
     ];
 
+    $result = pg_query_params($conn, $sql, $params);
 
-    $log_file = 'kuesioner_log.json';
-    $existing_data = file_exists($log_file) ? json_decode(file_get_contents($log_file), true) : [];
-    $existing_data[] = $data;
-    file_put_contents($log_file, json_encode($existing_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    if ($result) {
+      header('Location: thank-you.php');
+      exit();
+    } else {
+      $error_message = "Gagal menyimpan ke database: " . pg_last_error($conn);
+    }
 
-
-    header('Location: thank-you.php');
-    exit();
   } else {
     $error_message = "Mohon lengkapi semua field yang wajib diisi!";
   }
@@ -95,14 +107,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <img src="images/logo.png" alt="Logo RS Ekahusada" class="logo-icon">
         </div>
 
-
         <div class="header-text">
           <h1>RS EKAHUSADA</h1>
           <p>KUESIONER SURVEI KEPUASAN PASIEN</p>
         </div>
       </div>
     </div>
-
 
     <div class="form-container">
       <?php if (isset($error_message)): ?>
@@ -130,7 +140,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </select>
           </div>
         </div>
-
 
         <h2 class="section-title">Profil Pasien</h2>
         <div class="profile-section">
@@ -222,45 +231,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="form-field">
-              <label>Jenis Layanan * <span style="color: #e74c3c;">(Pilih salah satu atau lebih)</span></label>
-              <div class="checkbox-group">
-                <div class="checkbox-option">
-                  <input type="checkbox" id="admissi" name="services[]" value="admissi">
-                  <label for="admissi">ADMISI</label>
-                </div>
-                <div class="checkbox-option">
-                  <input type="checkbox" id="igd" name="services[]" value="igd">
-                  <label for="igd">IGD</label>
-                </div>
-                <div class="checkbox-option">
-                  <input type="checkbox" id="lab" name="services[]" value="lab">
-                  <label for="lab">LABORATORIUM</label>
-                </div>
-                <div class="checkbox-option">
-                  <input type="checkbox" id="farmasi" name="services[]" value="farmasi">
-                  <label for="farmasi">FARMASI</label>
-                </div>
-                <div class="checkbox-option">
-                  <input type="checkbox" id="radiologi" name="services[]" value="radiologi">
-                  <label for="radiologi">RADIOLOGI</label>
-                </div>
-                <div class="checkbox-option">
-                  <input type="checkbox" id="gizi" name="services[]" value="gizi">
-                  <label for="gizi">GIZI</label>
-                </div>
-                <div class="checkbox-option">
-                  <input type="checkbox" id="icu" name="services[]" value="icu">
-                  <label for="icu">ICU</label>
-                </div>
-                <div class="checkbox-option">
-                  <input type="checkbox" id="operasi" name="services[]" value="operasi">
-                  <label for="operasi">OPERASI</label>
-                </div>
-                <div class="checkbox-option">
-                  <input type="checkbox" id="rawat_jalan" name="services[]" value="rawat_jalan">
-                  <label for="rawat_jalan">RAWAT JALAN</label>
+          <!-- =========================
+               JENIS LAYANAN (RADIO)
+               ========================= -->
+            <div class="form-row">
+              <div class="form-field">
+                <label>Jenis Layanan * <span style="color: #e74c3c;">(Pilih salah satu)</span></label>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="admissi" name="service" value="admissi" required>
+                    <label for="admissi">ADMISI</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="igd" name="service" value="igd">
+                    <label for="igd">IGD</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="lab" name="service" value="lab">
+                    <label for="lab">LABORATORIUM</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="farmasi" name="service" value="farmasi">
+                    <label for="farmasi">FARMASI</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="radiologi" name="service" value="radiologi">
+                    <label for="radiologi">RADIOLOGI</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="gizi" name="service" value="gizi">
+                    <label for="gizi">GIZI</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="icu" name="service" value="icu">
+                    <label for="icu">ICU</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="operasi" name="service" value="operasi">
+                    <label for="operasi">OPERASI</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="rawat_jalan" name="service" value="rawat_jalan">
+                    <label for="rawat_jalan">RAWAT JALAN</label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -505,22 +518,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="complaint-section">
           <div class="form-row">
             <div class="form-field">
-              <label>Nama Pasien * <span style="color: #e74c3c;">(Contoh: Ahmad Suryadi)</span></label>
-              <input type="text" name="nama_pasien" required placeholder="Contoh: Ahmad Suryadi">
+              <label>Nama Pasien *</label>
+              <input class="form-profil" type="text" name="nama_pasien" required placeholder="Contoh: Ahmad Suryadi">
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-field">
-              <label>Alamat * <span style="color: #e74c3c;">(Contoh: Jl. Merdeka No. 123, Jakarta)</span></label>
-              <input type="text" name="alamat" required placeholder="Contoh: Jl. Merdeka No. 123, Jakarta">
+              <label>Alamat *</label>
+              <input class="form-profil" type="text" name="alamat" required placeholder="Contoh: Jl. Merdeka No. 123, Jakarta">
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-field">
-              <label>Nomor HP * <span style="color: #e74c3c;">(Contoh: 081234567890)</span></label>
-              <input type="tel" name="nomor_hp" required placeholder="Contoh: 081234567890">
+              <label>Nomor HP *</label>
+              <input class="form-profil" type="tel" name="nomor_hp" required placeholder="Contoh: 081234567890">
             </div>
           </div>
 
