@@ -1,3 +1,8 @@
+<?php
+session_start();
+$tipe_form = $_SESSION['tipe_form'];
+
+?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -91,7 +96,7 @@
       <p class="thank-you-message">
         Masukan Anda sangat berharga untuk meningkatkan kualitas layanan kami.
       </p>
-      <a href="index.php" class="back-button">Kembali ke Beranda</a>
+      <a href="<?php echo $tipe_form === 'kepuasan' ? 'kepuasan.php' : 'keluhan.php'; ?>" class="back-button">Kembali ke Beranda</a>
     </div>
 
     <div class="footer-thankyou">
