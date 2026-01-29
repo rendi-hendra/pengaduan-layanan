@@ -71,7 +71,7 @@ INSERT INTO "keluhan" ("id", "alamat", "no_hp", "masukan", "pukul", "tanggal") V
 -- Dumping structure for table public.kepuasan
 DROP TABLE IF EXISTS "kepuasan";
 CREATE TABLE IF NOT EXISTS "kepuasan" (
-	"id" BIGINT NOT NULL,
+	"id" SERIAL NOT NULL,
 	"created_at" TIMESTAMP NOT NULL DEFAULT now(),
 	"survey_date" DATE NOT NULL,
 	"survey_time" VARCHAR(20) NOT NULL,
@@ -212,3 +212,4 @@ INSERT INTO "responden" ("id", "pertanyaan") VALUES
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+
