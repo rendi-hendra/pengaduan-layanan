@@ -12,6 +12,11 @@ body {
   padding: 20px;
 }
 
+.alamatrs {
+  margin-top: 0;
+  margin-bottom: 4px;  /* jarak ke teks bawah */
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -279,6 +284,13 @@ textarea:focus {
   border: 1px solid #c5e7f7;
 }
 
+.maps {
+  color: #35deb3;
+}
+
+.namars {
+  margin-bottom: 0px;   /* jarak ke alamat */
+}
 
 .submit-btn {
   background: linear-gradient(to right, #0066cc, #00b3b3);
