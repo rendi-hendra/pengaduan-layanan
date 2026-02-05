@@ -6,9 +6,7 @@ Project ini dirancang untuk keperluan pembelajaran dan implementasi sistem infor
 ---
 
 ## Todo
-- ✅ Master profil, pelayanan, pekerjaan, pendidikan, penjamin, pertanyaan
-- ✅ Insert database kuisioner
-- ✅ Tanggal dan jam survei
+
 
 - DLL
 
