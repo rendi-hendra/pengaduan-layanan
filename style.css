@@ -13,7 +13,6 @@ body {
 }
 
 .alamatrs {
-  font-size: 12px !important;
   margin-top: 0;
   margin-bottom: 4px;  /* jarak ke teks bawah */
 }
@@ -78,6 +77,7 @@ body {
 
 .header-text h1 {
   font-size: 28px;
+  margin-bottom: 5px;
   letter-spacing: 0.5px;
   color: white;
 }
@@ -207,6 +207,22 @@ select:focus {
   margin-top: 10px;
 }
 
+.contact-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.contact-link .contact-card {
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.contact-link .contact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+}
+
 .scale-note {
   background: #e6f7ff;
   padding: 15px;
@@ -330,6 +346,49 @@ textarea:focus {
   max-width: 800px;
   margin: 0 auto;
   text-align: center;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    background: linear-gradient(135deg, #0066cc, #00b3b3);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-back:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.089);
+    background: linear-gradient(135deg, #156d86, #3d9eb0);
+}
+
+.btn-back:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.13);
+}
+
+.btn-back i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.btn-back:hover i {
+    transform: translateX(-4px);
+}
+
+@media (max-width: 480px) {
+    .btn-back {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 .footer-content h2 {

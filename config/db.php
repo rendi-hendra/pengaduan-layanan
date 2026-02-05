@@ -7,7 +7,7 @@ define('DB_HOST', 'localhost');
 define('DB_PORT', '5432');
 define('DB_NAME', 'pengaduan_layanan');
 define('DB_USER', 'postgres');
-define('DB_PASS', 'root');         // ganti
+define('DB_PASS', '');         // ganti
 
 $dsn = "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME;
 

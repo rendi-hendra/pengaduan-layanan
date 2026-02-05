@@ -54,7 +54,7 @@ if (!isValidDateYmd($tgl_awal) || !isValidDateYmd($tgl_akhir)) {
 ?>
 
 <div class="form-container">
-  <a href="javascript:history.back()" class="btn-back"> ← Kembali</a>
+  <a href="dashboard.php" class="btn-back"> ← Kembali</a>
   <h2 class="section-title">Filter Tanggal</h2>
 
   <?php if (!empty($error)): ?>

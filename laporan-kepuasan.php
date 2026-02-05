@@ -216,7 +216,7 @@ function buildUrl(array $override = []): string
 ?>
 
 <div class="form-container">
-  <a href="javascript:history.back()" class="btn-back">
+  <a href="dashboard.php" class="btn-back">
    ← Kembali
   </a>
   <h2 class="section-title">Filter Laporan Kepuasan</h2>
