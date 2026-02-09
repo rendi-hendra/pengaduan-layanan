@@ -49,179 +49,247 @@ $pendidikan = $pdo->query("SELECT nama FROM pendidikan ORDER BY nama")->fetchAll
 $pekerjaan = $pdo->query("SELECT nama FROM pekerjaan ORDER BY nama")->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
-<?php
-include 'layout/header.php';
-include 'layout/nav.php';
-include 'layout/sidebar.php';
-?>
+<?php include 'layout/header.php'; ?>
 
-<div id="layoutSidenav_content">
-  <main class="container-fluid px-4 mt-4">
-    <h1 class="mt-4">Laporan Kuisioner</h1>
-    <div class="mt-4">
-      <div class="row">
-        <div class="col-3">
-          <label class="form-label">Filter Tanggal</label>
-          <input type="text" id="dateRange" class="form-control" readonly>
-        </div>
-      </div>
-      <!-- <div class="d-flex justify-content-between align-items-end mb-3 flex-wrap gap-2">
-        <div class="d-flex gap-2">
-          <a class="btn btn-success">
-            <i class="fas fa-file-excel"></i> Excel
-          </a>
-          <a class="btn btn-danger">
-            <i class="fas fa-file-pdf"></i> PDF
-          </a>
-        </div>
-      </div> -->
-      <div class="table-responsive mt-4">
-        <table id="tabelRekap" class="table table-striped">
-          <thead class="table-dark sticky-top">
+<div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Laporan Kuisioner</h1>
+  </div>
+  <div class="mt-4">
+    <!-- <div class="table-responsive mt-4">
+      <table id="tabelRekap" class="table table-striped">
+        <thead class="table-dark sticky-top">
+          <tr>
+            <th>No</th>
+            <th>Tanggal</th>
+            <th>
+              <div class="d-flex justify-content-between">
+                <div>
+                  Layanan
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-link text-white p-0 filter-btn"
+                    data-bs-toggle="dropdown">
+                    <i class="bi bi-filter"></i>
+                  </button>
+                  <div class="dropdown-menu p-2">
+                    <select id="filter-layanan" class="form-select form-select-sm">
+                      <option value="">Semua</option>
+                      <?php foreach ($layanan as $v): ?>
+                        <option value="<?= htmlspecialchars($v) ?>"><?= htmlspecialchars($v) ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="d-flex justify-content-between">
+                <div>
+                  Penjamin
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-link text-white p-0 filter-btn"
+                    data-bs-toggle="dropdown">
+                    <i class="bi bi-filter"></i>
+                  </button>
+                  <div class="dropdown-menu p-2">
+                    <select id="filter-penjamin" class="form-select form-select-sm">
+                      <option value="">Semua</option>
+                      <?php foreach ($penjamin as $v): ?>
+                        <option value="<?= htmlspecialchars($v) ?>"><?= htmlspecialchars($v) ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="d-flex justify-content-between">
+                <div>
+                  Jenis Kelamin
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-link text-white p-0 filter-btn"
+                    data-bs-toggle="dropdown">
+                    <i class="bi bi-filter"></i>
+                  </button>
+                  <div class="dropdown-menu p-2">
+                    <select id="filter-jk" class="form-select form-select-sm">
+                      <option value="">Semua</option>
+                      <?php foreach ($jk as $v): ?>
+                        <option value="<?= htmlspecialchars($v) ?>"><?= htmlspecialchars($v) ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="d-flex justify-content-between">
+                <div>
+                  Pendidikan
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-link text-white p-0 filter-btn"
+                    data-bs-toggle="dropdown">
+                    <i class="bi bi-filter"></i>
+                  </button>
+                  <div class="dropdown-menu p-2">
+                    <select id="filter-pendidikan" class="form-select form-select-sm">
+                      <option value="">Semua</option>
+                      <?php foreach ($pendidikan as $v): ?>
+                        <option value="<?= htmlspecialchars($v) ?>"><?= htmlspecialchars($v) ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="d-flex justify-content-between">
+                <div>
+                  Pekerjaan
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-link text-white p-0 filter-btn"
+                    data-bs-toggle="dropdown">
+                    <i class="bi bi-filter"></i>
+                  </button>
+                  <div class="dropdown-menu p-2">
+                    <select id="filter-pekerjaan" class="form-select form-select-sm">
+                      <option value="">Semua</option>
+                      <?php foreach ($pekerjaan as $v): ?>
+                        <option value="<?= htmlspecialchars($v) ?>"><?= htmlspecialchars($v) ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </th>
+            <th>
+              Rata-rata Nilai
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($rows as $row): ?>
             <tr>
-              <th>No</th>
-              <th>Tanggal</th>
-              <th>
-                <div class="d-flex justify-content-between">
-                  <div>
-                    Layanan
-                  </div>
-                  <div>
-                    <button class="btn btn-sm btn-link text-white p-0 filter-btn"
-                      data-bs-toggle="dropdown">
-                      <i class="bi bi-filter"></i>
-                    </button>
-                    <div class="dropdown-menu p-2">
-                      <select id="filter-layanan" class="form-select form-select-sm">
-                        <option value="">Semua</option>
-                        <?php foreach ($layanan as $v): ?>
-                          <option value="<?= htmlspecialchars($v) ?>"><?= htmlspecialchars($v) ?></option>
-                        <?php endforeach; ?>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </th>
-              <th>
-                <div class="d-flex justify-content-between">
-                  <div>
-                    Penjamin
-                  </div>
-                  <div>
-                    <button class="btn btn-sm btn-link text-white p-0 filter-btn"
-                      data-bs-toggle="dropdown">
-                      <i class="bi bi-filter"></i>
-                    </button>
-                    <div class="dropdown-menu p-2">
-                      <select id="filter-penjamin" class="form-select form-select-sm">
-                        <option value="">Semua</option>
-                        <?php foreach ($penjamin as $v): ?>
-                          <option value="<?= htmlspecialchars($v) ?>"><?= htmlspecialchars($v) ?></option>
-                        <?php endforeach; ?>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </th>
-              <th>
-                <div class="d-flex justify-content-between">
-                  <div>
-                    Jenis Kelamin
-                  </div>
-                  <div>
-                    <button class="btn btn-sm btn-link text-white p-0 filter-btn"
-                      data-bs-toggle="dropdown">
-                      <i class="bi bi-filter"></i>
-                    </button>
-                    <div class="dropdown-menu p-2">
-                      <select id="filter-jk" class="form-select form-select-sm">
-                        <option value="">Semua</option>
-                        <?php foreach ($jk as $v): ?>
-                          <option value="<?= htmlspecialchars($v) ?>"><?= htmlspecialchars($v) ?></option>
-                        <?php endforeach; ?>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </th>
-              <th>
-                <div class="d-flex justify-content-between">
-                  <div>
-                    Pendidikan
-                  </div>
-                  <div>
-                    <button class="btn btn-sm btn-link text-white p-0 filter-btn"
-                      data-bs-toggle="dropdown">
-                      <i class="bi bi-filter"></i>
-                    </button>
-                    <div class="dropdown-menu p-2">
-                      <select id="filter-pendidikan" class="form-select form-select-sm">
-                        <option value="">Semua</option>
-                        <?php foreach ($pendidikan as $v): ?>
-                          <option value="<?= htmlspecialchars($v) ?>"><?= htmlspecialchars($v) ?></option>
-                        <?php endforeach; ?>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </th>
-              <th>
-                <div class="d-flex justify-content-between">
-                  <div>
-                    Pekerjaan
-                  </div>
-                  <div>
-                    <button class="btn btn-sm btn-link text-white p-0 filter-btn"
-                      data-bs-toggle="dropdown">
-                      <i class="bi bi-filter"></i>
-                    </button>
-                    <div class="dropdown-menu p-2">
-                      <select id="filter-pekerjaan" class="form-select form-select-sm">
-                        <option value="">Semua</option>
-                        <?php foreach ($pekerjaan as $v): ?>
-                          <option value="<?= htmlspecialchars($v) ?>"><?= htmlspecialchars($v) ?></option>
-                        <?php endforeach; ?>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </th>
-              <th>
-                Rata-rata Nilai
-              </th>
+              <td></td>
+              <td><?= htmlspecialchars($row['tanggal']) ?></td>
+              <td><?= htmlspecialchars($row['layanan']) ?></td>
+              <td><?= htmlspecialchars($row['penjamin']) ?></td>
+              <td>
+                <?php if ($row['jenis_kelamin'] === 'L'): ?>
+                  <span class="badge bg-primary">Laki-laki</span>
+                <?php elseif ($row['jenis_kelamin'] === 'P'): ?>
+                  <span class="badge bg-danger">Perempuan</span>
+                <?php else: ?>
+                  <span class="badge bg-secondary">-</span>
+                <?php endif; ?>
+              </td>
+              <td><?= htmlspecialchars($row['pendidikan']) ?></td>
+              <td><?= htmlspecialchars($row['pekerjaan']) ?></td>
+              <td><?= number_format($row['rata_rata_nilai'], 2) ?></td>
             </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($rows as $row): ?>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div> -->
+    <div class="card shadow mb-4 mt-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">
+          Data Laporan Kuisioner
+        </h6>
+      </div>
+
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-3">
+            <label class="form-label">Filter Tanggal</label>
+            <input type="text" id="dateRange" class="form-control" readonly>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <label>Layanan</label>
+            <select id="filter-layanan" class="form-control">
+              <option value="">Semua</option>
+              <?php foreach ($layanan as $l): ?>
+                <option value="<?= htmlspecialchars($l) ?>"><?= htmlspecialchars($l) ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label>Penjamin</label>
+            <select id="filter-penjamin" class="form-control">
+              <option value="">Semua</option>
+              <?php foreach ($penjamin as $p): ?>
+                <option value="<?= htmlspecialchars($p) ?>"><?= htmlspecialchars($p) ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label>Jenis Kelamin</label>
+            <select id="filter-jk" class="form-control">
+              <option value="">Semua</option>
+              <?php foreach ($jk as $j): ?>
+                <option value="<?= htmlspecialchars($j) ?>"><?= htmlspecialchars($j) ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table id="tabelRekap" class="table table-bordered" width="100%" cellspacing="0">
+            <thead>
               <tr>
-                <td></td>
-                <td><?= htmlspecialchars($row['tanggal']) ?></td>
-                <td><?= htmlspecialchars($row['layanan']) ?></td>
-                <td><?= htmlspecialchars($row['penjamin']) ?></td>
-                <td>
-                  <?php if ($row['jenis_kelamin'] === 'L'): ?>
-                    <span class="badge bg-primary">Laki-laki</span>
-                  <?php elseif ($row['jenis_kelamin'] === 'P'): ?>
-                    <span class="badge bg-danger">Perempuan</span>
-                  <?php else: ?>
-                    <span class="badge bg-secondary">-</span>
-                  <?php endif; ?>
-                </td>
-                <td><?= htmlspecialchars($row['pendidikan']) ?></td>
-                <td><?= htmlspecialchars($row['pekerjaan']) ?></td>
-                <td><?= number_format($row['rata_rata_nilai'], 2) ?></td>
+                <th>No</th>
+                <th>Tanggal</th>
+                <th>Layanan</th>
+                <th>Penjamin</th>
+                <th>Jenis Kelamin</th>
+                <th>Pendidikan</th>
+                <th>Pekerjaan</th>
+                <th>Rata-rata Nilai</th>
               </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              <?php foreach ($rows as $row): ?>
+                <tr>
+                  <td></td>
+                  <td><?= htmlspecialchars($row['tanggal']) ?></td>
+                  <td><?= htmlspecialchars($row['layanan']) ?></td>
+                  <td><?= htmlspecialchars($row['penjamin']) ?></td>
+                  <td>
+                    <?php if ($row['jenis_kelamin'] === 'L'): ?>
+                      <span class="badge badge-primary">Laki-laki</span>
+                    <?php elseif ($row['jenis_kelamin'] === 'P'): ?>
+                      <span class="badge badge-danger">Perempuan</span>
+                    <?php else: ?>
+                      <span class="badge badge-secondary">-</span>
+                    <?php endif; ?>
+                  </td>
+                  <td><?= htmlspecialchars($row['pendidikan']) ?></td>
+                  <td><?= htmlspecialchars($row['pekerjaan']) ?></td>
+                  <td><?= number_format($row['rata_rata_nilai'], 2) ?></td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+
+          </table>
+        </div>
       </div>
     </div>
-  </main>
-  <?php include 'layout/footer.php'; ?>
+  </div>
 </div>
+<?php include 'layout/footer.php'; ?>
 
 
-<script>
+<!-- <script>
   let startDate = null;
   let endDate = null;
 
@@ -371,6 +439,102 @@ include 'layout/sidebar.php';
       $(table.cells().nodes()).removeClass('highlight');
       $(table.column(colIdx).nodes()).addClass('highlight');
     });
+
+  });
+</script> -->
+
+<script>
+  let table;
+  let startDate = null;
+  let endDate = null;
+
+  $(function() {
+
+    table = $('#tabelRekap').DataTable({
+      pageLength: 10,
+      responsive: true,
+      fixedHeader: true,
+      order: [
+        [1, 'desc']
+      ], // tanggal terbaru
+      language: {
+        search: "Cari:",
+        lengthMenu: "Tampilkan _MENU_ data",
+        info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+        paginate: {
+          previous: "‹",
+          next: "›"
+        }
+      },
+      columnDefs: [{
+          targets: 0,
+          orderable: false,
+          searchable: false,
+          className: 'text-center'
+        },
+        {
+          targets: [1, 7],
+          className: 'text-center'
+        }
+      ]
+    });
+
+    // ================= FILTER TANGGAL =================
+    $.fn.dataTable.ext.search.push(function(settings, data) {
+      if (!startDate || !endDate) return true;
+
+      const tanggal = data[1];
+      if (!tanggal) return false;
+
+      const rowDate = moment(tanggal.trim(), 'YYYY-MM-DD', true);
+      if (!rowDate.isValid()) return false;
+
+      return rowDate.isBetween(startDate, endDate, null, '[]');
+    });
+
+    const today = moment().startOf('day');
+
+    $('#dateRange').daterangepicker({
+      startDate: today,
+      endDate: today,
+      locale: {
+        format: 'YYYY-MM-DD'
+      }
+    }, function(start, end) {
+      startDate = start.startOf('day');
+      endDate = end.endOf('day');
+      table.draw();
+    });
+
+    startDate = today;
+    endDate = today;
+    table.draw();
+
+    // ================= FILTER KOLOM =================
+    $('#filter-layanan').on('change', function() {
+      table.column(2).search(this.value).draw();
+    });
+
+    $('#filter-penjamin').on('change', function() {
+      table.column(3).search(this.value).draw();
+    });
+
+    $('#filter-jk').on('change', function() {
+      table.column(4).search(this.value).draw();
+    });
+
+    // ================= NOMOR OTOMATIS =================
+    table.on('order.dt search.dt draw.dt', function() {
+      table.column(0, {
+          search: 'applied',
+          order: 'applied'
+        })
+        .nodes()
+        .each(function(cell, i) {
+          cell.innerHTML = i + 1;
+        });
+    });
+    table.draw();
 
   });
 </script>

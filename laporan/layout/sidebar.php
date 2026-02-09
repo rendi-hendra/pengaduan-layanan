@@ -2,38 +2,42 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
-<div id="layoutSidenav">
-    <div id="layoutSidenav_nav">
-        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-            <div class="sb-sidenav-menu">
-                <div class="nav">
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-                    <div class="sb-sidenav-menu-heading">Core</div>
+    <!-- Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+        <div class="sidebar-brand-text mx-3">Admin</div>
+    </a>
 
-                    <a class="nav-link <?= ($current_page == 'index.php') ? 'active' : '' ?>" href="index.php">
-                        <div class="sb-nav-link-icon">
-                            <i class="fas fa-tachometer-alt"></i>
-                        </div>
-                        Dashboard
-                    </a>
+    <hr class="sidebar-divider my-0">
 
-                    <div class="sb-sidenav-menu-heading">Laporan</div>
+    <!-- Dashboard -->
+    <li class="nav-item <?= $current_page == 'index.php' ? 'active' : '' ?>">
+        <a class="nav-link" href="index.php">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
 
-                    <a class="nav-link <?= ($current_page == 'kuisioner.php') ? 'active' : '' ?>" href="kuisioner.php">
-                        <div class="sb-nav-link-icon">
-                            <i class="fas fa-file-alt"></i>
-                        </div>
-                        Kuisioner
-                    </a>
+    <!-- Kuisioner -->
+    <li class="nav-item <?= $current_page == 'kuisioner.php' ? 'active' : '' ?>">
+        <a class="nav-link" href="kuisioner.php">
+            <i class="bi bi-file-earmark-text-fill"></i>
+            <span>Kuisioner</span>
+        </a>
+    </li>
 
-                    <a class="nav-link <?= ($current_page == 'keluhan_saran.php') ? 'active' : '' ?>" href="keluhan_saran.php">
-                        <div class="sb-nav-link-icon">
-                            <i class="fas fa-comment"></i>
-                        </div>
-                        Keluhan & Saran
-                    </a>
+    <!-- Keluhan & Saran -->
+    <li class="nav-item <?= $current_page == 'keluhan_saran.php' ? 'active' : '' ?>">
+        <a class="nav-link" href="keluhan_saran.php">
+            <i class="bi bi-chat-fill"></i>
+            <span>Keluhan & Saran</span>
+        </a>
+    </li>
 
-                </div>
-            </div>
-        </nav>
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
+</ul>
