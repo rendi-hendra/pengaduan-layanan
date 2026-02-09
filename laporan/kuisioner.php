@@ -51,8 +51,8 @@ $pekerjaan = $pdo->query("SELECT nama FROM pekerjaan ORDER BY nama")->fetchAll(P
 
 <?php
 include 'layout/header.php';
-include 'layout/sidebar.php';
 include 'layout/nav.php';
+include 'layout/sidebar.php';
 ?>
 
 <div id="layoutSidenav_content">
@@ -192,9 +192,9 @@ include 'layout/nav.php';
             </tr>
           </thead>
           <tbody>
-            <?php foreach ($rows as $i => $row): ?>
+            <?php foreach ($rows as $row): ?>
               <tr>
-                <td><?= $i + 1 ?></td>
+                <td></td>
                 <td><?= htmlspecialchars($row['tanggal']) ?></td>
                 <td><?= htmlspecialchars($row['layanan']) ?></td>
                 <td><?= htmlspecialchars($row['penjamin']) ?></td>
@@ -261,7 +261,9 @@ include 'layout/nav.php';
       },
       columnDefs: [{
           targets: 0,
-          width: "50px",
+          orderable: false,
+          searchable: false,
+          width: "20px",
           className: "text-center"
         },
         {
@@ -302,6 +304,17 @@ include 'layout/nav.php';
           orderSequence: ['desc', 'asc']
         },
       ]
+    });
+
+    table.on('order.dt search.dt draw.dt', function() {
+      table.column(0, {
+          search: 'applied',
+          order: 'applied'
+        })
+        .nodes()
+        .each(function(cell, i) {
+          cell.innerHTML = i + 1;
+        });
     });
 
     // Default hari ini
