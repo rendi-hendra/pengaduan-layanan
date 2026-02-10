@@ -212,7 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $field = 'nilai' . $pid;
 
         // q4: jika BPJS -> 0
-        $nilai = ($pid === $Q4_ID && $is_bpjs) ? 0 : (int)$_POST[$field];
+        $nilai = ($pid === $Q4_ID && $is_bpjs) ? 4 : (int)$_POST[$field];
 
         $stmtIns->execute([
           ':pid'   => (int)$pid,
