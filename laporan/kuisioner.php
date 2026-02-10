@@ -282,7 +282,13 @@ $pekerjaan = $pdo->query("SELECT nama FROM pekerjaan ORDER BY nama")->fetchAll(P
                   <td></td>
                   <td><?= htmlspecialchars($row['tanggal']) ?></td>
                   <td><?= htmlspecialchars($row['layanan']) ?></td>
-                  <td><?= htmlspecialchars($row['penjamin']) ?></td>
+                  <td>
+                    <?php if ($row['penjamin'] === 'BPJS'): ?>
+                      <span class="badge badge-success">BPJS</span>
+                    <?php else: ?>
+                      <span class="badge badge-dark">UMUM</span>
+                    <?php endif; ?>
+                  </td>
                   <td>
                     <?php if ($row['jenis_kelamin'] === 'L'): ?>
                       <span class="badge badge-primary">Laki-laki</span>
