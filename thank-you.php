@@ -91,12 +91,12 @@ $tipe_form = $_SESSION['tipe_form'];
       </div>
       <h1 class="thank-you-title">Terima Kasih!</h1>
       <p class="thank-you-message">
-        Terima kasih atas partisipasi Anda dalam mengisi kuesioner kepuasan pasien RS Ekahusada.
-      </p>
-      <p class="thank-you-message">
-        Masukan Anda sangat berharga untuk meningkatkan kualitas layanan kami.
-      </p>
-      <a href="<?php echo $tipe_form === 'kepuasan' ? 'kepuasan.php' : 'keluhan.php'; ?>" class="back-button">Kembali</a>
+  Terima kasih atas partisipasi Anda dalam mengisi kuesioner kepuasan pasien RS Ekahusada.
+</p>
+<p class="thank-you-message">
+  Masukan dan saran yang Anda berikan sangat berharga untuk membantu meningkatkan kualitas layanan kami.
+</p>
+<a href="<?php echo $tipe_form === 'kepuasan' ? 'kepuasan.php' : 'keluhan.php'; ?>" class="back-button">Kembali ke Form</a>
     </div>
 
     <div class="footer-thankyou">
